@@ -28,7 +28,7 @@ export function PeriodTable({ periods, total, keys }: { periods: Period[]; total
       <table>
         <thead><tr><th>Kỳ</th>{keys.map((k) => <th key={k}>{metric(k).label}</th>)}</tr></thead>
         <tbody>
-          {periods.map((p) => (
+          {[...periods].reverse().map((p) => ( // kỳ mới nhất lên đầu
             <tr key={String(p.k)}>
               <td>{p.label}</td>
               {keys.map((k) => (
