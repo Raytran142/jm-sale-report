@@ -1,7 +1,9 @@
 'use client';
 /* Area một chuỗi (trang Tổng quan) và line nhiều đường (trang theo dimension) — cùng một hàm vẽ.
-   SVG tay, kích thước px cứng. Nhãn trục x cuối neo 'end' để không bị overflow:hidden của card xén. */
-import { useId, type MouseEvent } from 'react';
+   SVG tay, kích thước px cứng. Nhãn trục x cuối neo 'end' để không bị overflow:hidden của card xén.
+   Mỗi điểm dữ liệu có chấm tròn rỗng (khi các điểm cách nhau đủ xa để không dính vào nhau); rê chuột thì
+   kỳ đó có vạch dọc gạch đứt và chấm đặc, to hơn trên mọi đường — biết ngay tooltip đang nói về điểm nào. */
+import { useId, useState, type MouseEvent } from 'react';
 import { maxOf } from '@/lib/tokens';
 import { hideTip, showTip } from '../Tip';
 
@@ -26,17 +28,20 @@ export function TrendChart({ w, h, labels, series, fmt, int }: {
   const x = (i: number) => pl + (n < 2 ? iw / 2 : (i * iw) / (n - 1));
   const y = (v: number) => pt + ih - (Math.max(0, v) / max) * ih;
   const step = Math.max(1, Math.ceil(n / Math.max(3, Math.floor(iw / 78))));
+  const dots = n > 1 && iw / (n - 1) >= 9; // ≥ 9px giữa hai điểm: đủ chỗ cho chấm r=3 (xem theo ngày ~90 ngày trở xuống)
+  const [hi, setHi] = useState<number | null>(null); // kỳ đang rê chuột
 
   function onMove(e: MouseEvent<SVGSVGElement>) {
     const b = e.currentTarget.getBoundingClientRect();
     const sc = b.width / w;
     const j = Math.round(((e.clientX - b.left) / sc - pl) / iw * (n - 1));
-    if (j < 0 || j >= n) return hideTip();
+    if (!Number.isFinite(j) || j < 0 || j >= n) { setHi(null); return hideTip(); }
+    setHi(j);
     showTip(e, labels[j], series.map((s) => ({ name: s.name, color: s.color, v: s.values[j] == null ? '—' : fmt(s.values[j] as number) })));
   }
 
   return (
-    <svg width={w} height={h} onMouseMove={onMove} onMouseLeave={hideTip}>
+    <svg width={w} height={h} onMouseMove={onMove} onMouseLeave={() => { setHi(null); hideTip(); }}>
       {[0, 1, 2, 3].map((i) => {
         const yy = pt + ih - (i * ih) / 3;
         return (
@@ -46,6 +51,9 @@ export function TrendChart({ w, h, labels, series, fmt, int }: {
           </g>
         );
       })}
+      {hi !== null && (
+        <line x1={x(hi)} x2={x(hi)} y1={pt} y2={pt + ih} style={{ stroke: 'var(--label3)' }} strokeWidth={1} strokeDasharray="3 3" />
+      )}
       {series.map((s, si) => {
         // Chia thành các đoạn liền (bỏ điểm null); mỗi đoạn bắt đầu bằng M, vùng tô đóng theo từng đoạn.
         const segs: number[][] = [];
@@ -79,9 +87,16 @@ export function TrendChart({ w, h, labels, series, fmt, int }: {
             {segs.filter((g) => g.length === 1).map((g) => (
               <circle key={g[0]} cx={x(g[0])} cy={y(s.values[g[0]] as number)} r={2.4} style={{ fill: s.color }} />
             ))}
+            {dots && s.values.map((v, i) => (v === null ? null : (
+              <circle key={i} cx={x(i)} cy={y(v)} r={3} strokeWidth={1.6} style={{ fill: 'var(--card)', stroke: s.color }} />
+            )))}
           </g>
         );
       })}
+      {hi !== null && series.map((s) => (s.values[hi] == null ? null : (
+        <circle key={s.name} cx={x(hi)} cy={y(s.values[hi] as number)} r={4.8} strokeWidth={2}
+                style={{ fill: s.color, stroke: 'var(--card)' }} />
+      )))}
       {labels.map((l, i) =>
         i % step === 0 || i === n - 1 ? (
           <text key={i} x={x(i)} y={h - 7} textAnchor={i === n - 1 && n > 1 ? 'end' : 'middle'} fontSize={10.5}

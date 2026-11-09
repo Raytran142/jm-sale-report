@@ -33,8 +33,8 @@ So kỳ trước = cùng số ngày, ngay trước khoảng đang xem, cùng b�
 | Loại | Legend | Dùng ở |
 |---|---|---|
 | Donut tỷ trọng | 2 hàng (44px) | trang 1, 2, 3 — chỉ vẽ chỉ số cộng được; chỉ số đang chọn là tỷ lệ thì vẽ Doanh thu booking |
-| Area một chuỗi | không | trang 1, xu hướng chỉ số đang chọn hoặc Số booking (nút chuyển ở đầu card) |
-| Line nhiều đường | 1 hàng (24px) | trang 2, 3 — top 5 nhóm (xếp theo chỉ số đang chọn), vẽ chỉ số đang chọn hoặc Số booking |
+| Area một chuỗi | không | trang 1, xu hướng chỉ số đang chọn hoặc Số booking (nút chuyển ở đầu card); chấm tròn rỗng tại mỗi kỳ, rê chuột hiện vạch dọc gạch đứt + chấm đặc |
+| Line nhiều đường | 1 hàng (24px) | trang 2, 3 — top 5 nhóm (xếp theo chỉ số đang chọn), vẽ chỉ số đang chọn hoặc Số booking; chấm tròn tại mỗi kỳ, rê chuột hiện vạch dọc + chấm đặc trên mọi đường |
 | Donut tỷ trọng (trang 2, 3) | 2 hàng (44px) | tab Theo kênh OTA và Theo loại phòng có nút chuyển "chỉ số đang chọn / Số booking" riêng của card (dùng chung 2 tab, không dùng chung với chart xu hướng, mặc định Số booking); tên trong chú thích cắt ở 22 ký tự |
 | Bar xếp hạng | không | trang 1 (top loại phòng), trang 2, 3 — tối đa 7 thanh |
 | Bảng theo kỳ tô nhiệt | không | trang 1 — cột: Doanh thu booking, Số booking, Booking huỷ, Room night, Giá phòng TB / đêm (ADR); Booking huỷ pha đỏ (càng đậm càng xấu); kỳ mới nhất lên đầu |

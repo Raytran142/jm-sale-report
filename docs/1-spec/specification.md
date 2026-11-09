@@ -274,3 +274,6 @@ Dashboard theo dõi cho biết *cái gì đang xảy ra*, không cho biết *vì
 - **G40 · Vừa** — (2026-10-22, sửa tay) Nút chuyển "chỉ số đang chọn / Số booking" của donut tỷ trọng (G36) áp dụng cho cả tab Theo kênh OTA; lựa chọn dùng chung hai tab, mặc định Số booking.  
   Vì: Người dùng muốn xem tỷ trọng số booking theo kênh như theo loại phòng.  
   Nếu sai: app/app/dashboard/page.tsx › shareMode
+- **G41 · Thấp** — (2026-11-09, sửa tay) Chart đường (xu hướng 3 trang) có chấm tròn rỗng tại mỗi ngày / tuần / tháng khi các điểm cách nhau từ 9px trở lên (xem theo ngày khoảng 90 ngày trở xuống); rê chuột thì kỳ đó có vạch dọc gạch đứt và chấm đặc to hơn trên mọi đường, đi cùng tooltip.  
+  Vì: Rê chuột trên đường trơn khó biết tooltip đang chỉ điểm nào.  
+  Nếu sai: app/components/charts/TrendChart.tsx › dots, hi
