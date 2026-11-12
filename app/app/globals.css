@@ -168,6 +168,12 @@ input,select{font:inherit;color:inherit}
        position:relative;display:flex;overflow:hidden;
        background:var(--shell);border-radius:var(--r-shell);box-shadow:var(--sh-shell)}
 #stage[hidden],#login[hidden]{display:none}
+/* Chế độ cuộn trên màn hình nhỏ (Shell.tsx): #viewport cuộn được, không lề scale; #pan có kích thước của tấm
+   SAU khi co, tấm neo góc trên-trái nên vùng cuộn khớp đúng nội dung. Bóng / bo góc bỏ vì tấm tràn màn hình. */
+#viewport.pan{display:block;overflow:auto;scale:1;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+#pan{position:relative;overflow:hidden}
+#viewport.pan #stage,#viewport.pan #login{position:absolute;top:0;left:0;transform-origin:0 0;
+       border-radius:0;box-shadow:none}
 
 /* ═══════════════════════════════════════════════════════════════════════════
    TRANG ĐĂNG NHẬP — MỘT CARD CANH GIỮA

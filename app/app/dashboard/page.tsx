@@ -36,6 +36,8 @@ export default function DashboardPage() {
   const [shareMode, setShareMode] = useState<Trend>('count'); // donut tỷ trọng ở tab Theo kênh OTA và Theo loại phòng: Số booking (mặc định) hay chỉ số đang chọn — dùng chung
   const [tableMode, setTableMode] = useState<TableMode>('group'); // bảng chỉ số đầy đủ (tab kênh OTA, loại phòng): theo nhóm hay theo kỳ — dùng chung
   const [rail, setRail] = useState(false);
+  // Điện thoại (màn hẹp): sidebar thu gọn sẵn để tấm cuộn ngang dành chỗ cho nội dung; bấm nút để mở lại.
+  useEffect(() => { if (innerWidth < 768) setRail(true); }, []);
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [drawer, setDrawer] = useState(false);
   const [exporting, setExporting] = useState(false);

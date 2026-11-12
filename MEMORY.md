@@ -38,3 +38,8 @@
 
 - `byGrain(rows, grain, from, span)` điền đủ mọi kỳ trong khoảng lọc (kỳ trống = 0); `valueOf()` trả null cho tỷ lệ có mẫu số 0 (ADR) ⇒ chart ngắt đoạn, bảng "—". TrendChart `int` cho mốc trục Y nguyên. Trang "Theo thời gian" vốn đã điền đủ tháng.
 - Tab mới: Aqua Vista (tự nhận, có dòng cancelled).
+
+## 2026-11-12 · Điện thoại: chế độ cuộn (hướng 1)
+
+- Shell.tsx: hệ số vừa khít < 0,6 ⇒ chế độ cuộn, co theo chiều cao (0,75–1), #pan giữ kích thước sau khi co để thanh cuộn khớp; màn < 768px thì sidebar thu gọn sẵn. Điện thoại dọc 375×812 ra hệ số 0,9, cuộn ngang khoảng 1.440px.
+- Người dùng chọn thử hướng nhanh này trước; chưa đạt thì làm bố cục riêng cho điện thoại (hướng 2: thanh tab dưới, KPI lưới 2 cột, chart xếp dọc).
