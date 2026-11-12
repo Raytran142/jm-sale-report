@@ -21,13 +21,29 @@ export function Shell({ id = 'stage', className, children }: {
 
   useLayoutEffect(() => {
     const onResize = () => {
-      const s = Math.min(innerWidth / CV.w, innerHeight / CV.h); // không chặn trên 1: màn lớn thì phóng cho đầy
-      if (s >= PAN_BELOW) setFit({ s, pan: false });
-      else setFit({ s: Math.min(1, Math.max(PAN_MIN, innerHeight / CV.h)), pan: true });
+      const f = Math.min(innerWidth / CV.w, innerHeight / CV.h); // không chặn trên 1: màn lớn thì phóng cho đầy
+      const next = f >= PAN_BELOW ? { s: f, pan: false } : { s: Math.min(1, Math.max(PAN_MIN, innerHeight / CV.h)), pan: true };
+      // visualViewport cũng báo khi chụm ngón phóng to: giữ nguyên state nếu số không đổi để khỏi vẽ lại
+      setFit((p) => (p && p.s === next.s && p.pan === next.pan ? p : next));
     };
+    // Xoay máy: một số trình duyệt điện thoại (Safari iOS) báo `resize` TRƯỚC khi innerWidth/innerHeight đổi,
+    // nên tính lại thêm một lần sau khi xoay xong, và nghe cả orientationchange / visualViewport.
+    let t: ReturnType<typeof setTimeout> | undefined;
+    const later = () => { onResize(); clearTimeout(t); t = setTimeout(onResize, 350); };
     onResize();
-    addEventListener('resize', onResize);
-    return () => removeEventListener('resize', onResize);
+    addEventListener('resize', later);
+    addEventListener('orientationchange', later);
+    visualViewport?.addEventListener('resize', later);
+    // Lưới an toàn: theo dõi chính khung trang, bắt được cả lúc trình duyệt đổi kích thước mà không phát sự kiện.
+    const ro = new ResizeObserver(later);
+    ro.observe(document.documentElement);
+    return () => {
+      ro.disconnect();
+      clearTimeout(t);
+      removeEventListener('resize', later);
+      removeEventListener('orientationchange', later);
+      visualViewport?.removeEventListener('resize', later);
+    };
   }, []);
 
   const s = fit?.s ?? 1;
